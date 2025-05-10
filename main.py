@@ -1,3 +1,4 @@
+import argparse
 from langchain import hub
 from langchain.agents import AgentExecutor, create_react_agent, tool
 from langchain_openai import OpenAI, ChatOpenAI
@@ -179,27 +180,30 @@ def main(video_path_list, video_question_list, base_dir='preprocess', vqa_tool='
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--question_file')
+
+    args = parser.parse_args()
+
     config = OmegaConf.load('config/default.yaml')
     openai_api_key = config['openai_api_key']
     use_reid = config['use_reid']
     vqa_tool = config['vqa_tool']
     base_dir = config['base_dir']
 
-    video_path_list = [
-        "sample_videos/boats.mp4",
-        "sample_videos/talking.mp4",
-        "sample_videos/books.mp4",
-        "sample_videos/painting.mp4",
-        "sample_videos/kitchen.mp4"
-    ]
-    video_question_list = [
-        "How many boats are there in the video?",
-        "From what clue do you know that the woman with black spectacles at the start of the video is married?",
-        "Based on the actions observed, what could be a possible motivation or goal for what c is doing in the video?",
-        "What was the primary purpose of the cup of water in this video, and how did it contribute to the overall painting process?",
-        "Is there a microwave in the kitchen?"
-    ]
-    
+    with open(args.question_file, "r") as f:
+        meta = json.load(f)
+
+    video_question_list = []
+    video_path_list = []
+    for path in meta:
+        for question in meta[path]:
+            video_path_list.append(path)
+            video_question_list.append(question)
+
+    print(f"Videos: {video_path_list}")
+    print(f"Questions: {video_question_list}")
+
     main(video_path_list=video_path_list, 
          video_question_list=video_question_list,
           base_dir=base_dir, 

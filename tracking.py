@@ -1,5 +1,15 @@
 import cv2
+
 from ultralytics import YOLO, FastSAM, SAM, RTDETR, NAS
+from ultralytics.nn.tasks import DetectionModel
+from ultralytics.nn.modules.block import HGStem, HGBlock, RepC3
+from ultralytics.nn.modules.conv import Conv, DWConv, LightConv, Concat, RepConv
+from ultralytics.nn.modules.transformer import (
+    AIFI, DeformableTransformerDecoder, DeformableTransformerDecoderLayer,
+    MSDeformAttn, MLP
+)
+from ultralytics.nn.modules.head import RTDETRDecoder
+
 from time import time
 import pickle
 import os
@@ -7,7 +17,20 @@ from collections import defaultdict
 import clip
 import random as rd
 from PIL import Image
+
 import torch
+from torch.nn.modules.container import Sequential, ModuleList
+from torch.nn.modules.conv import Conv2d
+from torch.nn.modules.batchnorm import BatchNorm2d
+from torch.nn.modules.activation import ReLU, GELU, SiLU
+from torch.nn.modules.pooling import MaxPool2d
+from torch.nn.modules.linear import Identity, NonDynamicallyQuantizableLinear, Linear
+from torch.nn.modules.activation import MultiheadAttention
+from torch.nn.modules.normalization import LayerNorm
+from torch.nn.modules.dropout import Dropout
+from torch.nn.modules.upsampling import Upsample
+from torch.nn.modules.sparse import Embedding
+
 import numpy as np
 rd.seed(0)
 import torchvision.transforms as T
@@ -16,6 +39,14 @@ from time import time
 import math
 import sys
 from io import StringIO
+
+torch.serialization.add_safe_globals([
+    DetectionModel, Sequential, HGStem, HGBlock, Conv, Conv2d, BatchNorm2d, ReLU,
+    MaxPool2d, ModuleList, DWConv, Identity, LightConv, AIFI, MultiheadAttention,
+    NonDynamicallyQuantizableLinear, Linear, LayerNorm, Dropout, GELU, SiLU, Upsample,
+    Concat, RepC3, RepConv, RTDETRDecoder, DeformableTransformerDecoder, DeformableTransformerDecoderLayer,
+    MSDeformAttn, Embedding, MLP
+])
 
 
 id2category = {

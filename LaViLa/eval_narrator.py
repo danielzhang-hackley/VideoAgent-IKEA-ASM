@@ -16,7 +16,7 @@ try:
     numpy.distutils.__config__.blas_opt_info = np.distutils.__config__.blas_ilp64_opt_info
 except Exception:
     pass
-from nlgeval import NLGEval
+# from nlgeval import NLGEval
 
 import torch
 import torchvision.transforms as transforms
@@ -173,7 +173,7 @@ def validate_caption(val_loader, model, tokenizer, output_filename='caption.txt'
     model.eval()
     if args.use_half:
         model = model.half()
-    nlgeval = NLGEval()
+    # nlgeval = NLGEval()
     f = open(output_filename, 'w')
     ppls_all = []
     ppls_with_teacher_all = []
@@ -295,7 +295,7 @@ def validate_caption(val_loader, model, tokenizer, output_filename='caption.txt'
 
     print('=> Calling NLGEval')
     f.write('=> Calling NLGEval\n')
-    metrics_dict = nlgeval.compute_metrics([reference], hypothesis)
+    metrics_dict = {}  # nlgeval.compute_metrics([reference], hypothesis)
     for k in metrics_dict:
         print('{:16s} = {:9.3f}'.format(k, metrics_dict[k]))
         f.write('{:16s} = {:9.3f} \n'.format(k, metrics_dict[k]))

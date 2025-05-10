@@ -41,7 +41,7 @@ class Captioning:
         if not os.path.exists(ckpt_path):
             print('downloading model to {}'.format(ckpt_path))
             urllib.request.urlretrieve('https://dl.fbaipublicfiles.com/lavila/checkpoints/narrator/{}'.format(ckpt_name), ckpt_path)
-        ckpt = torch.load(ckpt_path, map_location='cpu')
+        ckpt = torch.load(ckpt_path, map_location='cpu', weights_only=False)
         state_dict = OrderedDict()
         for k, v in ckpt['state_dict'].items():
             state_dict[k.replace('module.', '')] = v

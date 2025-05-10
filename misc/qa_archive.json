@@ -1,0 +1,89 @@
+{
+    "videos/0001_black_floor_01_01_2019_08_14_15_22/dev3/images/scan_video.avi": {
+        "questions": [
+            "Which objects were used to build the table?",
+            "How many of each object used to build the table was visible in the video between 01:52 and 01:59?",
+            "Which objects were touched by the human building the furniture between 01:25 and 01:45?",
+            "Was the side panel visible between 0:45 and 0:50?",
+            "Was the lower table shelf visible between 1:58 and 2:16?",
+            "Did the human building the furniture touch any table legs between 1:58 and 2:16?",
+            "Did the human building the furniture touch any table legs between 1:04 and 1:21?"
+        ],
+        "answers": [
+            "The four table legs, the lower shelf, and the table top.",
+            "Two table legs and the table top.",
+            "Table leg and table top.",
+            "No.",
+            "Yes.",
+            "No.",
+            "Yes."
+        ]
+    },
+
+    "videos/0002_black_floor_01_01_2019_08_14_15_30/dev3/images/scan_video.avi": {
+        "questions": [
+            "Which objects were used to build the table?",
+            "How many of each object used to build the table was visible in the video between 01:00 and 01:13?",
+            "Which objects were touched by the human building the furniture between 00:02 and 00:13?",
+            "Was the lower shelf visible between 01:28 and 01:29?",
+            "Was the table top visible between 00:10 and 00:14?",
+            "Did the human building the furniture touch the table top between 00:29 and 00:38?",
+            "Did the human building the furniture touch the table top between 00:02 and 00:13?"
+        ],
+        "answers": [
+            "The four table legs, the lower shelf, and the table top.",
+            "Two table legs, lower shelf, and table top.",
+            "Table leg and table top.",
+            "No.",
+            "Yes.",
+            "No.",
+            "Yes."
+        ]
+    },
+
+    "videos/0004_white_floor_01_01_2019_08_14_16_19/dev3/images/scan_video.avi": {
+        "questions": [
+            "Which objects were used to build the table?",
+            "How many of each object used to build the table was visible in the video between 00:36 and 00:49?",
+            "Which objects were touched by the human building the furniture between 01:21 and 1:33?",
+            "Were all the table legs visible between 1:41 and 1:56?",
+            "Was all the table legs visible between 00:27 and 00:49?",
+            "Did the human building the furniture touch the table top between 01:50 and 02:01?",
+            "Did the human building the furniture touch the table top between 1:24 and 1:30?"
+        ],
+        "answers": [
+            "The four table legs, the lower shelf, and the table top.",
+            "The four table legs, the lower shelf, and the table top.",
+            "Table leg, table top, lower shelf",
+            "No.",
+            "Yes.",
+            "No.",
+            "Yes."
+        ]
+    },
+
+    "videos/3947_oak_floor_11_04_2019_08_28_16_43/dev3/images/scan_video.avi": {
+        "questions": [
+            "Which objects were used to build the table?",
+            "Which objects used to build the table were visible in the video at least once between 00:00 and 00:25?",
+            "How many disassembled table legs are visible between 00:20 and 00:25?",
+            "How many disassembled table legs are in the room between 00:20 and 00:25?",
+            "Which objects were touched by the humans building the furniture between 0:45 and 0:52?",
+            "Which objects were touched by the humans building the furniture between 00:58 and 1:07?",
+            "Was the the lower shelf of the coffee table visible from 00:00 to 00:20?",
+            "Did the girl building the furniture touch the table leg between 00:37 and 00:43?",
+            "Did the man building the furniture touch the table top between 00:37 and 00:43?"
+        ],
+        "answers": [
+            "The four table legs, the lower shelf, and the table top.",
+            "The four table legs, the lower shelf, and the table top.",
+            "Three.",
+            "Four.",
+            "Table leg.",
+            "Table top and lower shelf.",
+            "Yes.",
+            "Yes.",
+            "No."
+        ]
+    }
+}

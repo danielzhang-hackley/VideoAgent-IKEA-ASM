@@ -108,3 +108,5 @@ Instructions are in the <a href="https://github.com/unhelkar/comp-390-dfz">other
 The functions to evaluate VideoAgent's memory are in `evaluate_videoagent.py`. These cannot be called by the scripts in the other repo, but scripts can be easily changed to do so.
 
 Evaluation will work only for videos that are defined to be in the test set for segmentation tracking, as only these label parts. See the `segmentation_tracking_annotation.zip` file in the <a href='https://drive.google.com/drive/u/0/folders/1BKkQ7ngWcFXf_HKQpMtb2gzBag9to3tF'>IKEA ASM "annotations" folder</a>.
+
+TODO: Double check that the coordinates used by IKEA ASM and tracking/re-id are the same, see line 177 of `tracking.py`.

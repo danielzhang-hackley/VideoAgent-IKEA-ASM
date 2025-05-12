@@ -2,6 +2,7 @@ import pickle
 import motmetrics as mm
 import json
 import pandas as pd
+import numpy as np
 pd.set_option('display.max_rows', None)
 
 
@@ -56,9 +57,19 @@ def compare_captions(
     return results
 
 
-def compare_tracking(annotation_filepath: str, prediction_filepath: str):
+def compare_tracking(annotation_filepath: str, prediction_filepath: str, threshold: float=0.5):
     """
-    Check tracking metrics
+    Check tracking metrics.
+    
+    :param annotation_filepath: The path to the IKEA ASM tracking annotation JSON file.
+        This file must be a test file as defined by IKEA ASM in order to have the
+        needed "part_id" field in the JSON. As such, tracking evaluation is limited to
+        only the videos in the test set.
+    :param prediction_filepath: The path to the `reid.pkl` file created by VideoAgent's
+        preprocessing for its temporal memory.
+    :param threshold: A float between 0 and 1, inclusive. Only objects with distance less
+        than `distance` (as calculated by 1 - IOU) will be marked as matches.
+    
     """
 
     '''
@@ -89,20 +100,20 @@ def compare_tracking(annotation_filepath: str, prediction_filepath: str):
         ]
     }
     '''
-    # the frames with tracking data
-
     with open(annotation_filepath) as f:
         annotation_data = json.load(f)
 
     # Convert COCO into MOTChallenge
     images = annotation_data["images"]
     annotations = annotation_data["annotations"]
+    categories = {entry["id"]: entry["name"] for entry in annotation_data["categories"]}
 
     # The set of frames that were annotated
     frames_annotated = set()
 
     # keys are frame numbers. Values are tuples (category_id, bbox[0], ...)
     annotation_motc = {}
+    annotation_part_to_name = {}
     for annotation in annotations:
         # extract info needed for MOTChallenge format
         image_id = annotation["image_id"]
@@ -120,6 +131,7 @@ def compare_tracking(annotation_filepath: str, prediction_filepath: str):
             annotation_motc[frame_num].append((part_id, *bbox))
 
         frames_annotated.add(frame_num)
+        annotation_part_to_name[part_id] = categories[annotation["category_id"]]
 
     '''
     pseudo schema for rt-detr tracking (re-id)
@@ -154,22 +166,33 @@ def compare_tracking(annotation_filepath: str, prediction_filepath: str):
 
     # calculate MOTA
     acc = mm.MOTAccumulator(auto_id=True)
-    for frame_num in annotation_motc:
+    for i, frame_num in enumerate(annotation_motc):
         if frame_num not in prediction_motc:
             continue
 
+        print("checking frame", frame_num)
+
         objs = annotation_motc[frame_num]
         hyps = prediction_motc[frame_num]
+
+        print("objs is", objs)
+        print()
+        print("hyps is", hyps)
+        print()
 
         distance_matrix = mm.distances.iou_matrix(
             [obj[1:] for obj in objs], [hyp[1:] for hyp in hyps]
         )
 
+        distance_matrix[distance_matrix > threshold] = np.nan
+
+        print("distance matrix is\n", distance_matrix)
+
         acc.update(
             [obj[0] for obj in objs], [hyp[0] for hyp in hyps], distance_matrix
         )
 
-    return acc
+    return acc, annotation_part_to_name, prediction_data[2]
         
 
 
@@ -183,13 +206,24 @@ if __name__ == "__main__":
         print()
     '''
     
-    metrics= compare_tracking(
+    metrics, annotation_names, prediction_names = compare_tracking(
         "annotations/Final_Annotations_Segmentation_Tracking/Lack_Coffee_Table/0001_black_floor_05_02_2019_08_19_16_51/dev3/manual_coco_format_with_part_id.json",
-        "preprocess/scan_video.avi/reid.pkl"
+        "preprocess/0001_black_floor_05_02_2019_08_19_16_51.avi/reid.pkl",
+        threshold=0.9
     )
 
     events = metrics.mot_events
+    print(len(events))
+    print(annotation_names)
+    print(prediction_names)
     events = events[events["Type"].notnull()]
     print(events[events["Type"] == "MATCH"])
+    print(events[events["Type"] == "FP"])
+    print(events[events["Type"] == "MISS"])
+    print(events[events["Type"] == "SWITCH"])
 
+    '''
+    {1: 'table_top', 2: 'leg', 3: 'leg', 4: 'leg', 5: 'leg', 6: 'shelf'}
+    {0: 'person', 1: 'chair', 2: 'chair', 3: 'chair', 4: 'person', 5: 'chair', 6: 'tv', 7: 'chair', 8: 'tv', 9: 'surfboard', 10: 'dining table', 11: 'chair', 12: 'cell phone'}
+    '''
     
